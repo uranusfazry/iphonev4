@@ -1,1 +1,794 @@
-# iphonev4
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Quoted Generator</title>
+    
+    <!-- External CSS & Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS for iPhone Quote Generator --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --ios-blue: #007AFF;
+            --ios-light-blue: #5AC8FA;
+            --ios-pink: #FF2D55;
+            --ios-purple: #AF52DE;
+            --ios-bg: #F2F2F7;
+            --ios-card: #FFFFFF;
+            --ios-text: #000000;
+            --ios-text-secondary: #8E8E93;
+            --ios-border: rgba(0, 0, 0, 0.1);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+            
+            /* Watermark Variables */
+            --glow-color: hsl(186, 100%, 50%);
+            --background-color: rgba(10, 25, 40, 0.85);
+            --border-color: rgba(127, 255, 212, 0.3);
+            --text-color: rgba(230, 255, 255, 0.95);
+            --particle-base-hue: 186;
+            --particle-base-lightness: 60;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #F5F7FA 0%, #E8EBF0 100%);
+            color: var(--ios-text);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 122, 255, 0.05) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 48px 32px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: var(--shadow-md);
+            animation: fadeInDown 0.6s ease-out;
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--ios-blue) 0%, var(--ios-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        header p {
+            color: var(--ios-text-secondary);
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+        
+        .input-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 28px;
+            border-radius: 28px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .input-group { margin-bottom: 20px; }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--ios-text);
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: -0.2px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1.5px solid var(--ios-border);
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ios-text);
+            font-size: 16px;
+            resize: vertical;
+            font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1.5;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--ios-blue);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        textarea::placeholder { color: var(--ios-text-secondary); }
+        
+        .generate-btn {
+            background: linear-gradient(135deg, var(--ios-blue) 0%, var(--ios-light-blue) 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+            letter-spacing: -0.2px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 8px 20px rgba(0, 122, 255, 0.4);
+        }
+        
+        .generate-btn:active { transform: translateY(0) scale(0.99); }
+        
+        .result-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 28px;
+            border-radius: 28px;
+            margin-top: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+        
+        .result-section h3 {
+            color: var(--ios-text);
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            letter-spacing: -0.3px;
+        }
+        
+        #resultImage {
+            max-width: 100%;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            display: none;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        #resultImage:hover { transform: scale(1.02); }
+        
+        .action-btn {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--ios-blue);
+            border: 1.5px solid var(--ios-border);
+            padding: 12px 24px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 6px;
+            font-size: 0.95rem;
+            letter-spacing: -0.2px;
+        }
+        
+        .action-btn:hover {
+            background: var(--ios-blue);
+            color: white;
+            border-color: var(--ios-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
+        }
+        
+        .action-btn:active { transform: translateY(0); }
+        
+        .loading {
+            display: none;
+            color: var(--ios-text-secondary);
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .loading::after { content: '...'; animation: dots 1.5s infinite; }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            color: var(--ios-text);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .notification.show { transform: translateX(0); }
+        
+        .notification i { color: var(--ios-blue); }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            animation: zoomIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 32px;
+            right: 40px;
+            color: white;
+            font-size: 48px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--ios-text-secondary);
+            font-size: 0.85rem;
+            height: 20px;
+            font-weight: 400;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .container { padding: 0 8px; }
+            header { padding: 32px 24px; border-radius: 24px; }
+            .input-section, .result-section { padding: 20px; border-radius: 20px; }
+            .notification { top: 20px; right: 20px; left: 20px; transform: translateY(-120%); }
+            .notification.show { transform: translateY(0); }
+        }
+
+        /* --- CSS for Watermark --- */
+        @keyframes slideUpFadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes logo3DFlip {
+            0% { transform: rotateY(0deg); filter: brightness(1); }
+            50% { transform: rotateY(180deg); filter: brightness(2) drop-shadow(0 0 8px var(--glow-color)); }
+            100% { transform: rotateY(360deg); filter: brightness(1); }
+        }
+        
+        #futuristic-watermark {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            padding: 8px 15px;
+            min-width: 212px;
+            background: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 500;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(var(--glow-color), 0.15), 
+                        0 0 30px rgba(var(--glow-color), 0.1),
+                        inset 0 0 10px rgba(var(--glow-color), 0.1);
+            z-index: 9999;
+            cursor: pointer;
+            user-select: none;
+            overflow: hidden;
+            opacity: 0;
+            animation: slideUpFadeIn 1s ease-out 0.5s forwards;
+            transition: background-color 0.5s ease, color 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        
+        #futuristic-watermark:hover {
+            transform: translateY(-5px) scale(1.03);
+            border-color: rgba(127, 255, 212, 0.8);
+            box-shadow: 0 0 25px rgba(var(--glow-color), 0.4), 
+                        0 0 50px rgba(var(--glow-color), 0.25),
+                        inset 0 0 12px rgba(var(--glow-color), 0.2);
+        }
+
+        #futuristic-watermark.light-mode {
+            --glow-color: hsl(220, 90%, 60%);
+            --background-color: rgba(245, 248, 252, 0.85);
+            --border-color: rgba(60, 100, 150, 0.3);
+            --text-color: rgba(10, 25, 40, 0.95);
+            --particle-base-hue: 220;
+            --particle-base-lightness: 40;
+        }
+        
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .f-content-wrapper {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 18px;
+        }
+
+        .f-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .f-content.hidden {
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+            transform: scale(0.9);
+        }
+
+        .f-logo-container {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.4s ease;
+            flex-shrink: 0;
+        }
+
+        .f-logo-container.reacting {
+            animation: logo3DFlip 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
+        .f-logo-container svg {
+            width: 100%;
+            height: 100%;
+            stroke: var(--glow-color);
+            stroke-width: 8;
+            transition: stroke 0.5s ease;
+        }
+        
+        #f-watermark-text, #f-follow-message {
+            transition: color 0.5s ease;
+        }
+
+        #f-watermark-text {
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        #f-follow-message {
+            font-size: 11px;
+            letter-spacing: 0.2px;
+            font-weight: 700;
+            text-align: center;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>iPhone Quoted Generator</h1>
+            <p>Cukup ketik teks Anda, dan biarkan kami melakukan sisanya.</p>
+        </header>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <label for="messageText">Pesan Anda</label>
+                <textarea id="messageText" placeholder="Ketik kutipan atau pesan Anda di sini..." rows="4"></textarea>
+            </div>
+            
+            <button class="generate-btn" id="generateIphone">
+                <i class="fas fa-sparkles"></i> Generate Quote
+            </button>
+        </div>
+        
+        <div class="result-section">
+            <h3>Hasil Generator</h3>
+            <div class="loading" id="loading">Memproses</div>
+            <img id="resultImage" alt="Hasil generator">
+            <div id="resultButtons" style="display: none;">
+                <button class="action-btn" id="viewBtn">
+                    <i class="fas fa-eye"></i> Lihat Gambar
+                </button>
+                <button class="action-btn" id="newGenerateBtn">
+                    <i class="fas fa-plus-circle"></i> Buat Baru
+                </button>
+            </div>
+        </div>
+        
+        <footer></footer>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> <span id="notificationText"></span>
+    </div>
+
+    <!-- Elemen audio untuk memainkan suara klik -->
+    <audio id="clickSound" src="https://f.top4top.io/m_3565yr6fm0.mp3" preload="auto"></audio>
+
+    <!-- JavaScript for Watermark -->
+    <script>
+      (function() {
+        function initializeWatermark() {
+            const watermarkHTML = `
+              <div id="futuristic-watermark" title="Design by ©URANUSFAZRY">
+                <canvas id="particle-canvas"></canvas>
+                <div class="f-content-wrapper">
+                  <div id="f-main-content" class="f-content">
+                    <div class="f-logo-container">
+                      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M20 20 L80 20 L80 80 L20 80 Z" stroke-opacity="0.5"/>
+                          <path d="M50 5 L95 50 L50 95 L5 50 Z"/>
+                      </svg>
+                    </div>
+                    <span id="f-watermark-text">©URANUSFAZRY</span>
+                  </div>
+                  <div id="f-follow-content" class="f-content hidden">
+                      <span id="f-follow-message"></span>
+                  </div>
+                </div>
+              </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', watermarkHTML);
+
+            const watermarkEl = document.getElementById('futuristic-watermark');
+            const textEl = document.getElementById('f-watermark-text');
+            const logoEl = watermarkEl.querySelector('.f-logo-container');
+            const mainContentEl = document.getElementById('f-main-content');
+            const followContentEl = document.getElementById('f-follow-content');
+            const followMessageEl = document.getElementById('f-follow-message');
+            
+            let isAnimating = false;
+            let autoPlayInterval = null;
+            let currentSequence = 0;
+            const sequenceActions = ['scramble', 'logo', 'youtube', 'tiktok', 'reset'];
+
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const resizeCanvas = () => { if (watermarkEl) { canvas.width = watermarkEl.offsetWidth; canvas.height = watermarkEl.offsetHeight; } };
+            class Particle {
+                constructor() { this.reset(); this.baseSpeedX = (Math.random() - 0.5) * 0.5; this.baseSpeedY = (Math.random() - 0.5) * 0.5; this.speedX = this.baseSpeedX; this.speedY = this.baseSpeedY; }
+                update() {
+                    this.x += this.speedX; this.y += this.speedY; this.opacity -= this.fadeSpeed;
+                    if (this.opacity <= 0 || this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) { this.reset(); }
+                }
+                draw() {
+                    const style = getComputedStyle(watermarkEl);
+                    const hue = style.getPropertyValue('--particle-base-hue').trim();
+                    const lightness = parseFloat(style.getPropertyValue('--particle-base-lightness').trim());
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fillStyle = `hsl(${hue}, 100%, ${lightness + this.opacity * 40}%)`;
+                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+                }
+                reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.opacity = Math.random() * 0.5 + 0.2; this.size = Math.random() * 1.5 + 0.5; this.fadeSpeed = Math.random() * 0.015 + 0.005; }
+            }
+            const animateParticles = () => { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); ctx.globalAlpha = 1.0; requestAnimationFrame(animateParticles); };
+            
+            const textScramble = (el) => {
+                const originalText = "©URANUSFAZRY";
+                const chars = '!<>*#{}[]'; let frame = 0; isAnimating = true;
+                const interval = setInterval(() => {
+                    el.innerText = originalText.split('').map((char, i) => { const p = (frame - i * 2) / 15; if (p < 0) return ' '; if (p > 1) return char; return chars[Math.floor(Math.random() * chars.length)]; }).join('');
+                    if (frame >= originalText.length * 2 + 15) { clearInterval(interval); el.innerText = originalText; isAnimating = false; } frame++;
+                }, 30);
+            };
+
+            const typewriter = (el, text) => {
+                let i = 0; el.innerHTML = ""; isAnimating = true;
+                const interval = setInterval(() => {
+                    if (i < text.length) { el.innerHTML += text.charAt(i); i++; } 
+                    else { clearInterval(interval); isAnimating = false; }
+                }, 50);
+            };
+
+            const runAutoSequence = () => {
+                if (isAnimating) return;
+                const action = sequenceActions[currentSequence];
+                switch (action) {
+                    case 'scramble': textScramble(textEl); break;
+                    case 'logo':
+                        isAnimating = true;
+                        logoEl.classList.add('reacting');
+                        logoEl.addEventListener('animationend', () => { logoEl.classList.remove('reacting'); isAnimating = false; }, { once: true });
+                        break;
+                    case 'youtube':
+                        isAnimating = true;
+                        mainContentEl.classList.add('hidden');
+                        setTimeout(() => {
+                            followContentEl.classList.remove('hidden');
+                            typewriter(followMessageEl, "Follow uranusfazry YouTube");
+                        }, 400);
+                        break;
+                    case 'tiktok': 
+                        typewriter(followMessageEl, "Follow uranusfazry TikTok"); 
+                        break;
+                    case 'reset':
+                        isAnimating = true;
+                        followContentEl.classList.add('hidden');
+                        setTimeout(() => {
+                            mainContentEl.classList.remove('hidden');
+                            isAnimating = false;
+                        }, 400);
+                        break;
+                }
+                currentSequence = (currentSequence + 1) % sequenceActions.length;
+            };
+
+            const startAutoPlay = () => {
+                if (autoPlayInterval) clearInterval(autoPlayInterval);
+                runAutoSequence();
+                autoPlayInterval = setInterval(runAutoSequence, 3500);
+            };
+
+            watermarkEl.addEventListener('click', () => { watermarkEl.classList.toggle('light-mode'); });
+            
+            const init = () => {
+                resizeCanvas();
+                for (let i = 0; i < 40; i++) particles.push(new Particle());
+                animateParticles();
+                window.addEventListener('resize', resizeCanvas);
+                startAutoPlay();
+            };
+            init();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeWatermark);
+        } else {
+            initializeWatermark();
+        }
+      })();
+    </script>
+    
+    <!-- JavaScript for Quote Generator -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loading = document.getElementById('loading');
+            const resultImage = document.getElementById('resultImage');
+            const viewBtn = document.getElementById('viewBtn');
+            const newGenerateBtn = document.getElementById('newGenerateBtn');
+            const resultButtons = document.getElementById('resultButtons');
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const clickSound = document.getElementById('clickSound');
+            
+            const imageModal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const closeModal = document.querySelector('.close-modal');
+
+            const generateIphone = document.getElementById('generateIphone');
+            
+            generateIphone.addEventListener('click', function() {
+                const message = document.getElementById('messageText').value.trim();
+                
+                if (!message) {
+                    showNotification('Masukkan pesan terlebih dahulu!');
+                    return;
+                }
+                
+                clickSound.play().catch(error => console.log("Gagal memutar audio:", error));
+                
+                generateIphoneQuote();
+            });
+            
+            viewBtn.addEventListener('click', function() {
+                if (resultImage.src) {
+                    modalImage.src = resultImage.src;
+                    imageModal.style.display = 'flex';
+                }
+            });
+
+            closeModal.addEventListener('click', function() {
+                imageModal.style.display = 'none';
+            });
+            
+            imageModal.addEventListener('click', function(event) {
+                if (event.target === imageModal) {
+                    imageModal.style.display = 'none';
+                }
+            });
+            
+            newGenerateBtn.addEventListener('click', function() {
+                document.getElementById('messageText').value = '';
+                clearResults();
+            });
+            
+            async function generateIphoneQuote() {
+                loading.style.display = 'block';
+                clearResults();
+                
+                try {
+                    const now = new Date();
+                    const hours = now.getHours().toString().padStart(2, '0');
+                    const minutes = now.getMinutes().toString().padStart(2, '0');
+                    const time = `${hours}:${minutes}`;
+                    const message = document.getElementById('messageText').value;
+                    const carrier = "Telkomsel";
+                    const battery = 92;
+                    const signal = 4;
+
+                    const apiUrl = `https://brat.siputzx.my.id/iphone-quoted?time=${encodeURIComponent(time)}&messageText=${encodeURIComponent(message)}&carrierName=${encodeURIComponent(carrier)}&batteryPercentage=${battery}&signalStrength=${signal}&emojiStyle=apple`;
+                    
+                    resultImage.src = apiUrl;
+                    
+                    resultImage.onload = function() {
+                        loading.style.display = 'none';
+                        resultImage.style.display = 'block';
+                        resultButtons.style.display = 'block';
+                        showNotification('Quote berhasil dibuat!');
+                    };
+                    
+                    resultImage.onerror = function() {
+                        loading.style.display = 'none';
+                        showNotification('Error memuat gambar. Coba lagi nanti.');
+                    };
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    loading.style.display = 'none';
+                    showNotification('Terjadi kesalahan: ' + error.message);
+                }
+            }
+            
+            function clearResults() {
+                resultImage.style.display = 'none';
+                resultImage.src = '';
+                resultButtons.style.display = 'none';
+            }
+            
+            function showNotification(message) {
+                notificationText.textContent = message;
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
+
