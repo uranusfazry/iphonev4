@@ -8,9 +8,10 @@
     <!-- External CSS & Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CSS for iPhone Quote Generator --- */
+        /* --- CSS for iPhone Quote Generator (Light Theme) --- */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
         :root {
@@ -27,7 +28,7 @@
             --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
             --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
             
-            /* Watermark Variables */
+            /* Watermark Variables (Dark Default) */
             --glow-color: hsl(186, 100%, 50%);
             --background-color: rgba(10, 25, 40, 0.85);
             --border-color: rgba(127, 255, 212, 0.3);
@@ -71,16 +72,19 @@
             to { transform: rotate(360deg); }
         }
         
+        .ad-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            max-width: 100%;
+        }
+
         .container {
             max-width: 680px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
-        }
-
-        .ad-container {
-            text-align: center;
-            margin: 20px auto;
         }
         
         header {
@@ -317,6 +321,11 @@
             align-items: center;
             animation: fadeIn 0.3s ease-out;
         }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
         .modal-content {
             margin: auto;
@@ -368,7 +377,7 @@
         
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
-            .container { padding: 0 8px; }
+            .container { padding: 20px 16px; }
             header { padding: 32px 24px; border-radius: 24px; }
             .input-section, .result-section { padding: 20px; border-radius: 20px; }
             .notification { top: 20px; right: 20px; left: 20px; transform: translateY(-120%); }
@@ -415,7 +424,7 @@
         
         #futuristic-watermark:hover {
             transform: translateY(-5px) scale(1.03);
-            border-color: rgba(127, 255, 212, 0.8);
+            border-color: rgba(60, 100, 150, 0.8);
             box-shadow: 0 0 25px rgba(var(--glow-color), 0.4), 
                         0 0 50px rgba(var(--glow-color), 0.25),
                         inset 0 0 12px rgba(var(--glow-color), 0.2);
@@ -499,139 +508,99 @@
             text-align: center;
             white-space: nowrap;
         }
-
-        /* --- CSS for Interstitial Ad --- */
-        .interstitial-overlay {
+        
+        /* --- Interstitial Ad Styles --- */
+        #interstitial-ad-overlay {
+            display: none; /* Initially hidden */
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(242, 242, 247, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 10000;
-            display: flex;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .interstitial-overlay.visible {
+        #interstitial-ad-overlay.visible {
+            display: flex;
             opacity: 1;
-            visibility: visible;
         }
 
-        .interstitial-container {
+        #interstitial-ad-content {
             position: relative;
-            background: white;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            text-align: center;
-            max-width: 340px;
-            width: 90%;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 80px rgba(0,0,0,0.2);
+            border-radius: 24px;
+            max-width: 95vw;
+            max-height: 95vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             transform: scale(0.9);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .interstitial-overlay.visible .interstitial-container {
+        #interstitial-ad-overlay.visible #interstitial-ad-content {
             transform: scale(1);
         }
 
-        .interstitial-close-btn {
+        #interstitial-close-btn {
             position: absolute;
-            top: -15px;
-            right: -15px;
-            background: #333;
-            color: white;
-            border: 2px solid white;
+            top: -18px;
+            right: -18px;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, white, #e0e0e0);
+            color: #555;
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
             font-weight: bold;
-            line-height: 32px;
+            font-family: Arial, sans-serif;
             cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
             z-index: 10001;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: transform 0.2s ease, background 0.2s ease;
         }
-        .interstitial-close-btn:hover {
-            transform: scale(1.1) rotate(90deg);
-            background: var(--ios-pink);
+
+        #interstitial-close-btn:hover {
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
+
     </style>
 </head>
 <body>
-    <!-- Interstitial Ad Structure -->
-    <div id="interstitialAd" class="interstitial-overlay">
-        <div class="interstitial-container">
-            <button id="interstitialClose" class="interstitial-close-btn">&times;</button>
-            <!-- Ad 300x250 for interstitial -->
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : 'a5099d7439991867400964ee394b2229',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//librarysituation.com/a5099d7439991867400964ee394b2229/invoke.js"></script>
-        </div>
+    
+    <!-- AD 728x90 -->
+    <div class="ad-container">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : 'e992109233ebd08a818fb79b9b883118',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//librarysituation.com/e992109233ebd08a818fb79b9b883118/invoke.js"></script>
     </div>
-
-
+    
     <div class="container">
-        <!-- Ad 728x90 -->
-        <div class="ad-container">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : 'e992109233ebd08a818fb79b9b883118',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//librarysituation.com/e992109233ebd08a818fb79b9b883118/invoke.js"></script>
-        </div>
-
-        <!-- Ad 320x50 -->
-        <div class="ad-container">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '684df46ac7198a7aa192d7f8b9d70355',
-                    'format' : 'iframe',
-                    'height' : 50,
-                    'width' : 320,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//librarysituation.com/684df46ac7198a7aa192d7f8b9d70355/invoke.js"></script>
-        </div>
-
         <header>
             <h1>iPhone Quoted Generator</h1>
             <p>Cukup ketik teks Anda, dan biarkan kami melakukan sisanya.</p>
         </header>
-
-        <!-- Ad 160x300 -->
-        <div class="ad-container">
-             <script type="text/javascript">
-                atOptions = {
-                    'key' : '4cdc2196b0ab12c4ce5701a31995ce53',
-                    'format' : 'iframe',
-                    'height' : 300,
-                    'width' : 160,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//librarysituation.com/4cdc2196b0ab12c4ce5701a31995ce53/invoke.js"></script>
-        </div>
         
         <div class="input-section">
             <div class="input-group">
@@ -644,18 +613,18 @@
             </button>
         </div>
 
-        <!-- Ad 160x600 -->
+        <!-- AD 300x250 -->
         <div class="ad-container">
             <script type="text/javascript">
                 atOptions = {
-                    'key' : 'f075366cefcc8e17bd372ead183d1114',
+                    'key' : 'a5099d7439991867400964ee394b2229',
                     'format' : 'iframe',
-                    'height' : 600,
-                    'width' : 160,
+                    'height' : 250,
+                    'width' : 300,
                     'params' : {}
                 };
             </script>
-            <script type="text/javascript" src="//librarysituation.com/f075366cefcc8e17bd372ead183d1114/invoke.js"></script>
+            <script type="text/javascript" src="//librarysituation.com/a5099d7439991867400964ee394b2229/invoke.js"></script>
         </div>
         
         <div class="result-section">
@@ -672,8 +641,15 @@
             </div>
         </div>
         
+        <!-- Native Banner AD -->
+        <div class="ad-container" style="flex-direction: column; text-align: center; color: var(--ios-text-secondary); font-size: 0.9rem; margin-top: 30px;">
+            <p style="margin-bottom: 15px;">Please pay attention that by default native widget is set to 4 images in a row with teaser text just beyond the image...</p>
+            <script async="async" data-cfasync="false" src="//librarysituation.com/d8e1409560c5871c95bd11040a2e03cf/invoke.js"></script>
+            <div id="container-d8e1409560c5871c95bd11040a2e03cf"></div>
+        </div>
+
         <footer>
-             <!-- Ad 468x60 -->
+            <!-- AD 468x60 -->
             <div class="ad-container">
                 <script type="text/javascript">
                     atOptions = {
@@ -687,13 +663,49 @@
                 <script type="text/javascript" src="//librarysituation.com/2047f1c655dfcb97295c767a4a1592d6/invoke.js"></script>
             </div>
         </footer>
-
-        <!-- NativeBanner -->
+    </div>
+    
+    <!-- Other AD formats -->
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 40px; padding-bottom: 80px;">
+        <!-- AD 160x300 -->
         <div class="ad-container">
-            <script async="async" data-cfasync="false" src="//librarysituation.com/d8e1409560c5871c95bd11040a2e03cf/invoke.js"></script>
-            <div id="container-d8e1409560c5871c95bd11040a2e03cf"></div>
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '4cdc2196b0ab12c4ce5701a31995ce53',
+                    'format' : 'iframe',
+                    'height' : 300,
+                    'width' : 160,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//librarysituation.com/4cdc2196b0ab12c4ce5701a31995ce53/invoke.js"></script>
         </div>
-
+        <!-- AD 160x600 -->
+        <div class="ad-container">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : 'f075366cefcc8e17bd372ead183d1114',
+                    'format' : 'iframe',
+                    'height' : 600,
+                    'width' : 160,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//librarysituation.com/f075366cefcc8e17bd372ead183d1114/invoke.js"></script>
+        </div>
+        <!-- AD 320x50 -->
+        <div class="ad-container">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '684df46ac7198a7aa192d7f8b9d70355',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//librarysituation.com/684df46ac7198a7aa192d7f8b9d70355/invoke.js"></script>
+        </div>
     </div>
 
     <div id="imageModal" class="modal">
@@ -704,6 +716,15 @@
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i> <span id="notificationText"></span>
     </div>
+    
+    <!-- Full Screen Interstitial Ad -->
+    <div id="interstitial-ad-overlay">
+        <div id="interstitial-ad-content">
+            <span id="interstitial-close-btn">&times;</span>
+            <!-- Popunder script is used to serve the ad content -->
+            <script type='text/javascript' src='//librarysituation.com/06/18/cd/0618cd2a7cb128b73213ee8f37a332cb.js'></script>
+        </div>
+    </div>
 
     <!-- Elemen audio untuk memainkan suara klik -->
     <audio id="clickSound" src="https://f.top4top.io/m_3565yr6fm0.mp3" preload="auto"></audio>
@@ -713,7 +734,7 @@
       (function() {
         function initializeWatermark() {
             const watermarkHTML = `
-              <div id="futuristic-watermark" title="Design by ©URANUSFAZRY">
+              <div id="futuristic-watermark" class="light-mode" title="Design by ©URANUSFAZRY">
                 <canvas id="particle-canvas"></canvas>
                 <div class="f-content-wrapper">
                   <div id="f-main-content" class="f-content">
@@ -950,35 +971,32 @@
         });
     </script>
     
-    <!-- JavaScript for Interstitial Ad Logic -->
+    <!-- Interstitial Ad Logic -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const interstitialAd = document.getElementById('interstitialAd');
-            const interstitialClose = document.getElementById('interstitialClose');
+            const interstitialOverlay = document.getElementById('interstitial-ad-overlay');
+            const interstitialCloseBtn = document.getElementById('interstitial-close-btn');
 
-            // --- Logic untuk menampilkan iklan hanya sekali per sesi ---
-            const adShownInSession = sessionStorage.getItem('interstitialAdShown');
-
-            if (!adShownInSession) {
-                // Tampilkan iklan setelah 1.5 detik
+            if (!sessionStorage.getItem('interstitialShown')) {
                 setTimeout(() => {
-                    interstitialAd.classList.add('visible');
-                    // Tandai bahwa iklan sudah ditampilkan di sesi ini
-                    sessionStorage.setItem('interstitialAdShown', 'true');
-                }, 1500);
+                    interstitialOverlay.classList.add('visible');
+                    sessionStorage.setItem('interstitialShown', 'true');
+                }, 500);
             }
 
-            // --- Logic untuk tombol close ---
-            interstitialClose.addEventListener('click', function() {
-                interstitialAd.classList.remove('visible');
+            interstitialCloseBtn.addEventListener('click', function() {
+                interstitialOverlay.classList.remove('visible');
+                setTimeout(() => {
+                    if (!interstitialOverlay.classList.contains('visible')) {
+                       interstitialOverlay.style.display = 'none';
+                    }
+                }, 500);
             });
         });
     </script>
-
-
-    <!-- Popunder and SocialBar Scripts -->
-    <script type='text/javascript' src='//librarysituation.com/06/18/cd/0618cd2a7cb128b73213ee8f37a332cb.js'></script>
-    <script type='text/javascript' src='//librarysituation.com/eb/23/64/eb23642d885dd096cdb0afdf45d6c08f.js'></script>
+    
+    <!-- SocialBar Ad -->
+    <script type='text/javascript' src='//librarysituation.com/eb/23/64/eb23642d885dd096cdb0afdf45d6c08f.js'></script> 
 
 </body>
 </html>
